@@ -1,4 +1,4 @@
-from PrattTrussGeometry import MemberType
+from PrattTrussGeometry.MemberType import MemberType
 from PrattTrussGeometry.Node import Node
 from PrattTrussGeometry.Member import Member
 
@@ -11,8 +11,17 @@ class Geometry(object):
         self.height = height
         self.nWeb = nVertWebsPerSide
 
+    def getNNodes(self):
+        return 4 * self.nWeb + 4
+
+    def getNMembers(self):
+        return 8 * self.nWeb + 5
+
+    def getPitch(self):
+        return self.height / self.span
+
     def getNodes(self):
-        nNodes = 4*self.nWeb + 4
+        nNodes = self.getNNodes()
         horSpacing = self.span / (2*nNodes+2)
         nodes = []
         nodes.append(Node(0, 0, fixity='pin'))  # left support
@@ -32,12 +41,21 @@ class Geometry(object):
         return nodes
 
     def getMembers(self):
+        nNodes = self.getNNodes()
         members = []
-        # left 2, right 2
+        members.append(Member(0, 2, MemberType.botChord))  # bot left corner
+        members.append(Member(1, 3, MemberType.botChord))  # bot right corner
+        members.append(Member(0, 4, MemberType.topChord))  # top left corner
+        members.append(Member(1, 5, MemberType.topChord))  # top right corner
+        members.append(Member(nNodes - 1, nNodes, MemberType.vertWeb))  # center web
         for i in range(1, self.nWeb):
-            members.append(Member(0, 1, MemberType.botChord))  # webs + chords
-        # center
-
-
-
-
+            # left side
+            members.append(Member(4 * i - 2, 4 * i, MemberType.vertWeb))
+            members.append(Member(4 * i - 2, 4 * i + 2, MemberType.botChord))
+            members.append(Member(4 * i, min(4 * i + 4, nNodes - 1), MemberType.topChord))
+            members.append(Member(4 * i, 4 * i + 2, MemberType.diaWeb))
+            # right side
+            members.append(Member(4 * i - 1, 4 * i + 1, MemberType.vertWeb))
+            members.append(Member(4 * i - 1, min(4 * i + 3, nNodes - 2), MemberType.botChord))
+            members.append(Member(4 * i + 1, min(4 * i + 5, nNodes - 1), MemberType.topChord))
+            members.append(Member(4 * i + 1, min(4 * i + 3, nNodes - 2), MemberType.diaWeb))
