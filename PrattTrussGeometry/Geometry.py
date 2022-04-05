@@ -23,7 +23,7 @@ class Geometry(object):
 
     def getNodes(self):
         nNodes = self.getNNodes()
-        horSpacing = self.span / (2*nNodes+2)
+        horSpacing = self.span / (2*self.nWeb+2)
         nodes = []
         nodes.append(Node(0, 0, fixity='pin'))  # left support
         nodes.append(Node(self.span, 0, fixity='roller'))  # right support
@@ -48,7 +48,7 @@ class Geometry(object):
         members.append(Member(1, 3, MemberType.botChord))  # bot right corner
         members.append(Member(0, 4, MemberType.topChord))  # top left corner
         members.append(Member(1, 5, MemberType.topChord))  # top right corner
-        members.append(Member(nNodes - 1, nNodes, MemberType.vertWeb))  # center web
+        members.append(Member(nNodes - 2, nNodes - 1, MemberType.vertWeb))  # center web
         for i in range(1, self.nWeb + 1):
             # left side
             members.append(Member(4 * i - 2, 4 * i, MemberType.vertWeb))
@@ -60,6 +60,8 @@ class Geometry(object):
             members.append(Member(4 * i - 1, min(4 * i + 3, nNodes - 2), MemberType.botChord))
             members.append(Member(4 * i + 1, min(4 * i + 5, nNodes - 1), MemberType.topChord))
             members.append(Member(4 * i + 1, min(4 * i + 3, nNodes - 2), MemberType.diaWeb))
+
+        return members
 
     # left to right
     def getTopNodesIndices(self):
@@ -90,6 +92,8 @@ class Geometry(object):
         for i in removeNodes:
             topWebNodeIndices.remove(i)
 
+        return topWebNodeIndices
+
     # left to right
     def getBotWebNodesIndices(self):
         botWebNodeIndices = self.getBotNodesIndices()
@@ -99,4 +103,6 @@ class Geometry(object):
 
         for i in removeNodes:
             botWebNodeIndices.remove(i)
+
+        return botWebNodeIndices
 
