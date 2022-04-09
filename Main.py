@@ -14,13 +14,26 @@ class MyHSS(xs.HSS):
     def A(self):
         return self.B * self.H - self.b * self.h
 
+    @property
+    def xpts(self):
+        x = self.B / 2
+        xi = self.b / 2
+        return [[-x, -xi], [x, xi], [x, xi], [-x, -xi], [-x, -xi]]
 
+    @property
+    def ypts(self):
+        y = self.H / 2
+        yi = self.h / 2
+        return [[y, yi], [y, yi], [-y, -yi], [-y, -yi], [y, yi]]
+
+
+# Example usage to analyze a Pratt style roof truss
 def main():
     truss = Geometry(28, 4.083, 1)
     forces = Forces(truss.getNNodes())
-    forces.setForceAtNodes(truss.getTopNodesIndices(), forceY=-0.802)
-    forces.setForceAtNode(0, forceY=-0.201)
-    forces.setForceAtNode(1, forceY=-0.201)
+    forces.setForceAtNodes(truss.getTopNodesIndices(), forceY=-1.24)
+    forces.setForceAtNode(0, forceY=-0.620)
+    forces.setForceAtNode(1, forceY=-0.620)
 
     xs1 = MyHSS(2, 1.834, 2, 1.834)
     # xs1 = xs.AISC('HSS4X2X1/8')
@@ -37,7 +50,7 @@ def main():
     print(f"members match? {trussAnalysis.nMembers == truss.getNMembers()}")
 
     # Broken
-    # print(xs1.plot())
+    print(xs1.plot())
     print(f"B = {xs1.B}")
     print(f"H = {round(xs1.H, 4)}")
     print(f"t = {round((xs1.H - xs1.h) / 2, 4)}")
@@ -52,7 +65,7 @@ def main():
 
     deformation = trussAnalysis.directStiffness(np.array(forces.forces))
 
-    # trussAnalysis.plot()
+    trussAnalysis.plot()
 
     np.set_printoptions(precision=0, linewidth=500)
 
@@ -77,7 +90,7 @@ def main():
     print(f'Maximum downward displacement = {round(min(yDeform) * 12, 3)} in. at node {yDeform.index(min(yDeform))}')
 
     # BROKEN
-    # trussAnalysis.plotDeformation()
+    # trussAnalysis.plotDeformation(scale=25)
 
     trussAnalysis.printNodes()
 
