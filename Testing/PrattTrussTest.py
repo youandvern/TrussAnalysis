@@ -45,7 +45,7 @@ def make_forces():
     forces.setForceAtNodes(truss.getTopNodesIndices(), forceY=-1.24)
     forces.setForceAtNode(0, forceY=-0.620)
     forces.setForceAtNode(1, forceY=-0.620)
-    return forces
+    return forces.forces
 
 
 def test_struct():
@@ -66,15 +66,20 @@ def test_analysis_structure():
 
 def test_forces():
     forces = make_forces()
-    assert forces.forces[0] == 0
-    assert forces.forces[1] == -0.620
-    assert forces.forces[8] == 0
-    assert forces.forces[9] == -1.24
-    assert forces.forces[12] == 0
-    assert forces.forces[13] == 0
+    assert forces[0] == 0
+    assert forces[1] == -0.620
+    assert forces[8] == 0
+    assert forces[9] == -1.24
+    assert forces[12] == 0
+    assert forces[13] == 0
 
 
 # Testing external library
 def test_analysis():
     truss = make_structure()
     xs1, trussAnalysis = make_analysis_structure(truss)
+    forces = make_forces()
+    trussAnalysis.directStiffness(np.array(forces))
+    assert approx(trussAnalysis.members[0].axial, 0.01) == -6.4
+    assert approx(trussAnalysis.members[2].axial, 0.01) == 6.6
+    assert approx(trussAnalysis.members[9].axial, 0.01) == 0.0

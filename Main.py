@@ -8,7 +8,7 @@ import StructPy.Truss as Truss
 import numpy as np
 
 
-# Broken HSS
+# Broken HSS in StructPy
 class MyHSS(xs.HSS):
     @property
     def A(self):
@@ -49,7 +49,7 @@ def main():
     print(f"nodes match? {trussAnalysis.nNodes == truss.getNNodes()}")
     print(f"members match? {trussAnalysis.nMembers == truss.getNMembers()}")
 
-    # Broken
+    # Broken in StructPy
     print(xs1.plot())
     print(f"B = {xs1.B}")
     print(f"H = {round(xs1.H, 4)}")
@@ -89,7 +89,7 @@ def main():
 
     print(f'Maximum downward displacement = {round(min(yDeform) * 12, 3)} in. at node {yDeform.index(min(yDeform))}')
 
-    # BROKEN
+    # BROKEN in StructPy
     # trussAnalysis.plotDeformation(scale=25)
 
     trussAnalysis.printNodes()
