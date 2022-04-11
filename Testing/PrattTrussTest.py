@@ -1,15 +1,12 @@
 from pytest import approx
-import yaml
-import logging
-
-from Forces import Forces
-from PrattTrussGeometry.Geometry import Geometry
 
 import StructPy.cross_sections as xs
-import StructPy.structural_classes as sc
 import StructPy.materials as ma
 import StructPy.Truss as Truss
 import numpy as np
+
+from Forces import Forces
+from PrattTrussGeometry.Geometry import Geometry
 
 
 # Fixed Area Calc
