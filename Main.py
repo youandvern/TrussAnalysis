@@ -1,4 +1,4 @@
-from Forces import Forces
+from TrussUtilities.Forces import Forces
 from PrattTrussGeometry.Geometry import Geometry
 
 import StructPy.cross_sections as xs

@@ -5,7 +5,7 @@ import StructPy.materials as ma
 import StructPy.Truss as Truss
 import numpy as np
 
-from Forces import Forces
+from TrussUtilities.Forces import Forces
 from PrattTrussGeometry.Geometry import Geometry
 
 
