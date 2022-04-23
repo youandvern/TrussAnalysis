@@ -5,7 +5,7 @@ from TrussAnalysis.TrussUtilities.Member import Member
 
 class Geometry(object):
     """
-    Class to generate nodes and members for Howe Roof Truss geometry
+    Class to generate nodes and members for Howe Bridge Truss geometry
     """
     def __init__(self, span, height, nVertWebsPerSide=1):
         self.span = span
@@ -19,7 +19,7 @@ class Geometry(object):
         return 8 * self.nWeb + 5
 
     def getPitch(self):
-        return self.height / self.span
+        return 0
 
     def getNodes(self):
         nNodes = self.getNNodes()
@@ -29,8 +29,7 @@ class Geometry(object):
 
         for i in range(1, (nNodes // 2)):
             xi = horSpacing * i
-            hi = min(xi * 2 * self.height / self.span, 2 * self.height - xi * 2 * self.height / self.span)
-            nodes.append(Node(xi, hi))  # upper
+            nodes.append(Node(xi, self.height))  # upper
             nodes.append(Node(xi, 0))  # lower
 
         nodes.append(Node(self.span, 0, fixity='roller'))  # right support
@@ -78,25 +77,9 @@ class Geometry(object):
 
     # left to right
     def getTopWebNodesIndices(self):
-        topWebNodeIndices = self.getTopNodesIndices()
-        removeNodes = [topWebNodeIndices[0],
-                       topWebNodeIndices[len(topWebNodeIndices) // 2],
-                       topWebNodeIndices[- 1]]
-
-        for i in removeNodes:
-            topWebNodeIndices.remove(i)
-
-        return topWebNodeIndices
+        return self.getTopNodesIndices()[1: -1]
 
     # left to right
     def getBotWebNodesIndices(self):
-        botWebNodeIndices = self.getBotNodesIndices()
-        removeNodes = [botWebNodeIndices[0],
-                       botWebNodeIndices[len(botWebNodeIndices) // 2],
-                       botWebNodeIndices[- 1]]
-
-        for i in removeNodes:
-            botWebNodeIndices.remove(i)
-
-        return botWebNodeIndices
+        return self.getBotNodesIndices()[1: -1]
 
