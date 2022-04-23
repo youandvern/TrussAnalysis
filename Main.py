@@ -31,8 +31,6 @@ def main():
     truss = Geometry(28, 4.083, 1)
     forces = Forces(truss.getNNodes())
     forces.setForceAtNodes(truss.getTopNodesIndices(), forceY=-1.24)
-    forces.setForceAtNode(0, forceY=-0.620)
-    forces.setForceAtNode(1, forceY=-0.620)
 
     xs1 = MyHSS(2, 1.834, 2, 1.834)
     # xs1 = xs.AISC('HSS4X2X1/8')

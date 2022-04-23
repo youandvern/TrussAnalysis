@@ -41,7 +41,7 @@ def make_forces():
     forces = Forces(truss.getNNodes())
     forces.setForceAtNodes(truss.getTopNodesIndices(), forceY=-1.24)
     forces.setForceAtNode(0, forceY=-0.620)
-    forces.setForceAtNode(1, forceY=-0.620)
+    forces.setForceAtNode(truss.getNNodes()-1, forceY=-0.620)
     return forces.forces
 
 
@@ -49,8 +49,8 @@ def test_struct():
     truss = make_structure()
     assert truss.getNNodes() == 8
     assert truss.getNMembers() == 13
-    assert truss.getTopNodesIndices() == [0, 4, 7, 5, 1]
-    assert truss.getNodes()[7].y == 4.083
+    assert truss.getTopNodesIndices() == [0, 1, 3, 5, 7]
+    assert truss.getNodes()[3].y == 4.083
 
 
 def test_analysis_structure():
@@ -65,8 +65,8 @@ def test_forces():
     forces = make_forces()
     assert forces[0] == 0
     assert forces[1] == -0.620
-    assert forces[8] == 0
-    assert forces[9] == -1.24
+    assert forces[6] == 0
+    assert forces[7] == -1.24
     assert forces[12] == 0
     assert forces[13] == 0
 
@@ -77,6 +77,7 @@ def test_analysis():
     xs1, trussAnalysis = make_analysis_structure(truss)
     forces = make_forces()
     trussAnalysis.directStiffness(np.array(forces))
-    assert approx(trussAnalysis.members[0].axial, 0.01) == -6.4
-    assert approx(trussAnalysis.members[2].axial, 0.01) == 6.6
-    assert approx(trussAnalysis.members[9].axial, 0.01) == 0.0
+    assert approx(trussAnalysis.members[0].axial, 0.01) == 6.64
+    assert approx(trussAnalysis.members[2].axial, 0.01) == 4.43
+    assert approx(trussAnalysis.members[4].axial, 0.01) == -6.38
+    assert approx(trussAnalysis.members[12].axial, 0.01) == 0.0

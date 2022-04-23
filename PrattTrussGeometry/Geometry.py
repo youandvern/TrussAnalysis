@@ -26,40 +26,39 @@ class Geometry(object):
         horSpacing = self.span / (2*self.nWeb+2)
         nodes = []
         nodes.append(Node(0, 0, fixity='pin'))  # left support
-        nodes.append(Node(self.span, 0, fixity='roller'))  # right support
 
-        for i in range(1, self.nWeb + 1):
+        for i in range(1, (nNodes // 2)):
             xi = horSpacing * i
-            hi = xi * 2 * self.height / self.span
-            nodes.append(Node(xi, 0))  # lower left
-            nodes.append(Node(self.span - xi, 0))  # lower right
-            nodes.append(Node(xi, hi))  # upper left
-            nodes.append(Node(self.span - xi, hi))  # upper right
+            hi = min(xi * 2 * self.height / self.span, 2 * self.height - xi * 2 * self.height / self.span)
+            nodes.append(Node(xi, hi))  # upper
+            nodes.append(Node(xi, 0))  # lower
 
-        nodes.append(Node(self.span / 2, 0))  # center top
-        nodes.append(Node(self.span / 2, self.height))  # center bot
+        nodes.append(Node(self.span, 0, fixity='roller'))  # right support
 
         return nodes
 
     def getMembers(self):
         nNodes = self.getNNodes()
         members = []
-        members.append(Member(0, 2, MemberType.botChord))  # bot left corner
-        members.append(Member(1, 3, MemberType.botChord))  # bot right corner
-        members.append(Member(0, 4, MemberType.topChord))  # top left corner
-        members.append(Member(1, 5, MemberType.topChord))  # top right corner
-        members.append(Member(nNodes - 2, nNodes - 1, MemberType.vertWeb))  # center web
-        for i in range(1, self.nWeb + 1):
-            # left side
-            members.append(Member(4 * i - 2, 4 * i, MemberType.vertWeb))
-            members.append(Member(4 * i - 2, 4 * i + 2, MemberType.botChord))
-            members.append(Member(4 * i, min(4 * i + 4, nNodes - 1), MemberType.topChord))
-            members.append(Member(4 * i, 4 * i + 2, MemberType.diaWeb))
-            # right side
-            members.append(Member(4 * i - 1, 4 * i + 1, MemberType.vertWeb))
-            members.append(Member(4 * i - 1, min(4 * i + 3, nNodes - 2), MemberType.botChord))
-            members.append(Member(4 * i + 1, min(4 * i + 5, nNodes - 1), MemberType.topChord))
-            members.append(Member(4 * i + 1, min(4 * i + 3, nNodes - 2), MemberType.diaWeb))
+
+        for i in range(1, nNodes, 2):
+            members.append(Member(max(0, i - 2), i, MemberType.topChord))
+
+        for i in range(0, nNodes, 2):
+            members.append(Member(i, min(i + 2, nNodes - 1), MemberType.botChord))
+
+        # Left web
+        for i in range(1, self.nWeb * 2, 2):
+            members.append(Member(i, i+1, MemberType.vertWeb))
+            members.append(Member(i, i+3, MemberType.diaWeb))
+
+        # Center post
+        members.append(Member((nNodes // 2) - 1, nNodes // 2, MemberType.vertWeb))
+
+        # Right web
+        for i in range(nNodes // 2, nNodes - 2):
+            memType = MemberType.diaWeb if i // 2 == 0 else MemberType.vertWeb
+            members.append(Member(i, i + 1, memType))
 
         return members
 
@@ -67,19 +66,18 @@ class Geometry(object):
     def getTopNodesIndices(self):
         nNodes = self.getNNodes()
         topNodeIndices = []
-        for i in range(self.nWeb + 1):
-            topNodeIndices.append(4 * i)
-        for i in range(self.nWeb + 2):
-            topNodeIndices.append(min(4 * (self.nWeb - i) + 5, nNodes - 1))
+        topNodeIndices.append(0)
+        for i in range(1, nNodes, 2):
+            topNodeIndices.append(i)
         return topNodeIndices
 
     # left to right
     def getBotNodesIndices(self):
+        nNodes = self.getNNodes()
         botNodeIndices = []
-        for i in range(self.nWeb + 2):
-            botNodeIndices.append(max(0, 4 * i - 2))
-        for i in range(self.nWeb + 1):
-            botNodeIndices.append(max(1, (self.nWeb - i) * 4 - 1))
+        for i in range(0, nNodes, 2):
+            botNodeIndices.append(i)
+        botNodeIndices.append(nNodes - 1)
         return botNodeIndices
 
     # left to right
