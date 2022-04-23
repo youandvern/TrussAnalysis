@@ -1,5 +1,5 @@
-from TrussAnalysis.TrussUtilities import Forces
-from TrussAnalysis.PrattTrussGeometry import Geometry
+from TrussAnalysis.TrussUtilities.Forces import Forces
+from TrussAnalysis.Geometries.PrattRoofTruss import Geometry
 
 import StructPy.cross_sections as xs
 import StructPy.materials as ma

@@ -5,7 +5,7 @@ from TrussAnalysis.TrussUtilities.Member import Member
 
 class Geometry(object):
     """
-    Class to generate nodes and members for Pratt Truss geometry
+    Class to generate nodes and members for Fink Roof Truss geometry
     """
     def __init__(self, span, height, nVertWebsPerSide=1):
         self.span = span
@@ -13,52 +13,43 @@ class Geometry(object):
         self.nWeb = nVertWebsPerSide
 
     def getNNodes(self):
-        return 4 * self.nWeb + 4
+        return 4 * self.nWeb + 3
 
     def getNMembers(self):
-        return 8 * self.nWeb + 5
+        return 8 * self.nWeb + 3
 
     def getPitch(self):
         return self.height / self.span
 
     def getNodes(self):
         nNodes = self.getNNodes()
-        horSpacing = self.span / (2*self.nWeb+2)
+        horSpacingTop = self.span / (2*self.nWeb+2)
+        horSpacingBot = self.span / (2*self.nWeb+1)
         nodes = []
         nodes.append(Node(0, 0, fixity='pin'))  # left support
 
-        for i in range(1, (nNodes // 2)):
-            xi = horSpacing * i
-            hi = min(xi * 2 * self.height / self.span, 2 * self.height - xi * 2 * self.height / self.span)
-            nodes.append(Node(xi, hi))  # upper
-            nodes.append(Node(xi, 0))  # lower
+        for i in range(1, (nNodes // 2) + 1):
+            xit = horSpacingTop * i
+            xib = horSpacingBot * i
+            hit = min(xit * 2 * self.height / self.span, 2 * self.height - xit * 2 * self.height / self.span)
+            nodes.append(Node(xit, hit))  # upper
+            nodes.append(Node(xib, 0))  # lower
 
-        nodes.append(Node(self.span, 0, fixity='roller'))  # right support
-
+        nodes[-1].fixity = 'roller'  # right support
         return nodes
 
     def getMembers(self):
         nNodes = self.getNNodes()
         members = []
 
-        for i in range(1, nNodes, 2):
-            members.append(Member(max(0, i - 2), i, MemberType.topChord))
+        for i in range(1, nNodes + 1, 2):
+            members.append(Member(max(0, i - 2), min(i, nNodes - 1), MemberType.topChord))
 
-        for i in range(0, nNodes, 2):
-            members.append(Member(i, min(i + 2, nNodes - 1), MemberType.botChord))
+        for i in range(0, nNodes - 1, 2):
+            members.append(Member(i, i + 2, MemberType.botChord))
 
-        # Left web
-        for i in range(1, self.nWeb * 2, 2):
-            members.append(Member(i, i+1, MemberType.vertWeb))
-            members.append(Member(i, i+3, MemberType.diaWeb))
-
-        # Center post
-        members.append(Member((nNodes // 2) - 1, nNodes // 2, MemberType.vertWeb))
-
-        # Right web
-        for i in range(nNodes // 2, nNodes - 2):
-            memType = MemberType.diaWeb if i // 2 == 0 else MemberType.vertWeb
-            members.append(Member(i, i + 1, memType))
+        for i in range(1, nNodes - 2):
+            members.append((Member(i, i + 1, MemberType.diaWeb)))
 
         return members
 
@@ -67,8 +58,9 @@ class Geometry(object):
         nNodes = self.getNNodes()
         topNodeIndices = []
         topNodeIndices.append(0)
-        for i in range(1, nNodes, 2):
+        for i in range(1, nNodes - 1, 2):
             topNodeIndices.append(i)
+        topNodeIndices.append(nNodes - 1)
         return topNodeIndices
 
     # left to right
@@ -77,7 +69,6 @@ class Geometry(object):
         botNodeIndices = []
         for i in range(0, nNodes, 2):
             botNodeIndices.append(i)
-        botNodeIndices.append(nNodes - 1)
         return botNodeIndices
 
     # left to right
@@ -85,7 +76,7 @@ class Geometry(object):
         topWebNodeIndices = self.getTopNodesIndices()
         removeNodes = [topWebNodeIndices[0],
                        topWebNodeIndices[len(topWebNodeIndices) // 2],
-                       topWebNodeIndices[len(topWebNodeIndices) - 1]]
+                       topWebNodeIndices[- 1]]
 
         for i in removeNodes:
             topWebNodeIndices.remove(i)
@@ -96,8 +87,7 @@ class Geometry(object):
     def getBotWebNodesIndices(self):
         botWebNodeIndices = self.getBotNodesIndices()
         removeNodes = [botWebNodeIndices[0],
-                       botWebNodeIndices[len(botWebNodeIndices) // 2],
-                       botWebNodeIndices[len(botWebNodeIndices) - 1]]
+                       botWebNodeIndices[- 1]]
 
         for i in removeNodes:
             botWebNodeIndices.remove(i)

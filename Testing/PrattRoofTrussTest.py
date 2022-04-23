@@ -6,7 +6,7 @@ import StructPy.Truss as Truss
 import numpy as np
 
 from TrussAnalysis.TrussUtilities.Forces import Forces
-from TrussAnalysis.PrattTrussGeometry.Geometry import Geometry
+from TrussAnalysis.Geometries.PrattRoofTruss import Geometry
 
 
 # Fixed Area Calc
@@ -77,7 +77,7 @@ def test_analysis():
     xs1, trussAnalysis = make_analysis_structure(truss)
     forces = make_forces()
     trussAnalysis.directStiffness(np.array(forces))
-    assert approx(trussAnalysis.members[0].axial, 0.01) == 6.64
-    assert approx(trussAnalysis.members[2].axial, 0.01) == 4.43
-    assert approx(trussAnalysis.members[4].axial, 0.01) == -6.38
-    assert approx(trussAnalysis.members[12].axial, 0.01) == 0.0
+    assert approx(trussAnalysis.members[0].axial, 0.001) == 6.64
+    assert approx(trussAnalysis.members[2].axial, 0.001) == 4.43
+    assert approx(trussAnalysis.members[4].axial, 0.001) == -6.38
+    assert approx(trussAnalysis.members[12].axial, 0.001) == 0.0
