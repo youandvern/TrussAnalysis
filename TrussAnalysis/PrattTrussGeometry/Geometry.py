@@ -1,6 +1,6 @@
-from TrussUtilities.MemberType import MemberType
-from TrussUtilities.Node import Node
-from TrussUtilities.Member import Member
+from TrussAnalysis.TrussUtilities.MemberType import MemberType
+from TrussAnalysis.TrussUtilities.Node import Node
+from TrussAnalysis.TrussUtilities.Member import Member
 
 
 class Geometry(object):
