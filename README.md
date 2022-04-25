@@ -162,15 +162,4 @@ Project Link: [https://github.com/youandvern/TrussAnalysis](https://github.com/y
 <!-- MARKDOWN LINKS & IMAGES  -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://img.shields.io/github/contributors/youandvern/TrussAnalysis.svg?style=for-the-badge
-[contributors-url]: https://github.com/youandvern/TrussAnalysis/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/youandvern/TrussAnalysis.svg?style=for-the-badge
-[forks-url]: https://github.com/youandvern/TrussAnalysis/network/members
-[stars-shield]: https://img.shields.io/github/stars/youandvern/TrussAnalysis.svg?style=for-the-badge
-[stars-url]: https://github.com/youandvern/TrussAnalysis/stargazers
-[issues-shield]: https://img.shields.io/github/issues/youandvern/TrussAnalysis.svg?style=for-the-badge
-[issues-url]: https://github.com/youandvern/TrussAnalysis/issues
-[license-shield]: https://img.shields.io/github/license/youandvern/TrussAnalysis.svg?style=for-the-badge
-[license-url]: https://github.com/youandvern/TrussAnalysis/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/andrew-v-young
-[product-screenshot]: images/screenshot.png
+
