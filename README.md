@@ -159,7 +159,7 @@ Project Link: [https://github.com/youandvern/TrussAnalysis](https://github.com/y
 
 
 
-<!-- MARKDOWN LINKS & IMAGES -->
+<!-- MARKDOWN LINKS & IMAGES  -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://img.shields.io/github/contributors/youandvern/TrussAnalysis.svg?style=for-the-badge
 [contributors-url]: https://github.com/youandvern/TrussAnalysis/graphs/contributors
