@@ -1,14 +1,16 @@
 <div id="top"></div>
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
-[![Contributors][contributors-shield]][contributors-url]
 
+<p align="center">
+<img src="https://img.shields.io/github/contributors/youandvern/TrussAnalysis?style=for-the-badge" alt="Contributors">
+<img src="https://img.shields.io/github/forks/youandvern/TrussAnalysis?style=for-the-badge" alt="Forks">
+<img src="https://img.shields.io/github/stars/youandvern/TrussAnalysis?style=for-the-badge" alt="Stars">
+<img src="https://img.shields.io/github/issues/youandvern/TrussAnalysis?style=for-the-badge" alt="Issues">
+</p>
+<p align="center">
+<img src="https://img.shields.io/badge/python-3.6-brightgreen?style=for-the-badge" alt="Compatibility">
+<img src="https://img.shields.io/github/license/youandvern/TrussAnalysis?style=for-the-badge" alt="License">
+<img src="https://img.shields.io/badge/-LinkedIn-black?style=for-the-badge&logo=linkedin&colorB=555" alt="Contact">
+</p>
 
 
 
@@ -21,10 +23,7 @@
   <p align="center">
     A simple python library to quickly build and analyze common truss shapes.
     <br />
-    <a href="https://github.com/youandvern/TrussAnalysis"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/youandvern/TrussAnalysis">View Demo</a>
+    <a href="https://truss-analysis.encompapp.com/">View Demo</a>
     ·
     <a href="https://github.com/youandvern/TrussAnalysis/issues">Report Bug</a>
     ·
@@ -64,10 +63,7 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`
+This library was built to simplify and automate truss design for the most common truss configurations. It generates node and member geometry for a number of truss styles given very simple inputs. It also provides simple methods to generate and populate a force matrix for structural analysis via the Direct Stiffness Method. The generated geometry is transformed into a [StructPy](https://github.com/BrianChevalier/StructPy/) truss analysis object in order to perform the analysis.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -110,7 +106,7 @@ To get a local copy up and running follow these simple example steps.
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-For examples, please reference [Main](Main.py) or [Test Examples](/Testing).
+For examples, please reference [Main.py](Main.py) or [Test Examples](/Testing).
 
 To see this package in action, check out the [Truss Analysis Tool](https://truss-analysis.encompapp.com/)
 
@@ -152,10 +148,4 @@ Andrew Young - youandvern@gmail.com
 Project Link: [https://github.com/youandvern/TrussAnalysis](https://github.com/youandvern/TrussAnalysis)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- MARKDOWN LINKS & IMAGES  -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/youandvern/TrussAnalysis.svg?style=for-the-badge
 
