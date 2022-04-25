@@ -94,7 +94,7 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-* Install python 3 or later along with pip pip
+* Install python 3.6 or later along with pip.
 
 ### Installation
 
