@@ -1,17 +1,25 @@
 <div id="top"></div>
 
+<!-- Shields not necessary now. Can be used later on. -->
+
+<!-- 
+
 <p align="center">
 <img src="https://img.shields.io/github/contributors/youandvern/TrussAnalysis?style=for-the-badge" alt="Contributors">
 <img src="https://img.shields.io/github/forks/youandvern/TrussAnalysis?style=for-the-badge" alt="Forks">
 <img src="https://img.shields.io/github/stars/youandvern/TrussAnalysis?style=for-the-badge" alt="Stars">
 <img src="https://img.shields.io/github/issues/youandvern/TrussAnalysis?style=for-the-badge" alt="Issues">
 </p>
+
+
+ -->
+ 
+ 
 <p align="center">
 <img src="https://img.shields.io/badge/python-3.6-brightgreen?style=for-the-badge" alt="Compatibility">
 <img src="https://img.shields.io/github/license/youandvern/TrussAnalysis?style=for-the-badge" alt="License">
 <img src="https://img.shields.io/badge/-LinkedIn-black?style=for-the-badge&logo=linkedin&colorB=555" alt="Contact">
 </p>
-
 
 
 <!-- PROJECT LOGO -->
