@@ -98,17 +98,13 @@ To get a local copy up and running follow these simple example steps.
 
 ### Installation
 
-2. Clone the repo
+1. Clone the repo
    ```sh
    git clone https://github.com/youandvern/TrussAnalysis.git
    ```
-3. Install required packages
+2. Install required packages
    ```sh
    pip install -r /path/to/requirements.txt
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
    ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -118,26 +114,11 @@ To get a local copy up and running follow these simple example steps.
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+For examples, please reference [Main](Main.py) or [Test Examples](/Testing).
 
-_For more examples, please refer to the [Documentation](https://example.com)_
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- ROADMAP -->
-## Roadmap
-
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
-
-See the [open issues](https://github.com/youandvern/TrussAnalysis/issues) for a full list of proposed features (and known issues).
+To see this package in action, check out the [Truss Analysis Tool](https://truss-analysis.encompapp.com/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
 
 
 <!-- CONTRIBUTING -->
@@ -170,20 +151,9 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - youandvern@gmail.com
+Andrew Young - youandvern@gmail.com
 
 Project Link: [https://github.com/youandvern/TrussAnalysis](https://github.com/youandvern/TrussAnalysis)
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
-
-* []()
-* []()
-* []()
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
