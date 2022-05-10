@@ -47,7 +47,7 @@ def main():
     print(f"members match? {trussAnalysis.nMembers == truss.getNMembers()}")
 
     # Broken in StructPy
-    print(xs1.plot())
+    # print(xs1.plot())
     print(f"B = {xs1.B}")
     print(f"H = {round(xs1.H, 4)}")
     print(f"t = {round((xs1.H - xs1.h) / 2, 4)}")
@@ -61,8 +61,9 @@ def main():
     print(f"E = {A992.E}")
 
     deformation = trussAnalysis.directStiffness(np.array(forces.forces))
+    # print(deformation)
 
-    trussAnalysis.plot()
+    # trussAnalysis.plot()
 
     np.set_printoptions(precision=0, linewidth=500)
 
@@ -94,7 +95,8 @@ def main():
     trussAnalysis.printMembers()
 
     print(trussAnalysis.members[8].k)
-    print(trussAnalysis.members[8].kglobal)
+    # print(trussAnalysis.members[8].kglobal.tolist())
+    # print(trussAnalysis.freeDoF)
 
 
 if __name__ == "__main__":

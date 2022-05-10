@@ -9,22 +9,15 @@ from TrussAnalysis.TrussUtilities.Forces import Forces
 from TrussAnalysis.Geometries.WarrenBridgeTruss import Geometry
 
 
-# Fixed Area Calc
-class MyHSS(xs.HSS):
-    @property
-    def A(self):
-        return self.B * self.H - self.b * self.h
-
-
 def make_structure():
-    truss = Geometry(24, 4, 3)
+    truss = Geometry(16, 2, 3)
     return truss
 
 
 def make_analysis_structure(truss):
-    xs1 = MyHSS(2, 1.834, 2, 1.834)
-    A992 = ma.A992()
-    trussAnalysis = Truss.Truss(cross=xs1, material=A992)
+    xs1 = xs.generalSection(1, 1, 1)
+    randomMaterial = ma.Custom(1000, 10)
+    trussAnalysis = Truss.Truss(cross=xs1, material=randomMaterial)
 
     for node in truss.getNodes():
         trussAnalysis.addNode(node.x, node.y, fixity=node.fixity)
