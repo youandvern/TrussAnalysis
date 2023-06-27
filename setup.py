@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='TrussAnalysis',
-    version='0.3.3',
+    version='0.3.4',
     packages=find_packages(),
     url='https://github.com/youandvern/TrussAnalysis',
     license='MIT',
