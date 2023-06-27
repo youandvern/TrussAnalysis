@@ -7,10 +7,10 @@ class Geometry(object):
     """
     Class to generate nodes and members for Parallel Chord Roof Truss geometry
     """
-    def __init__(self, span, height, nVertWebsPerSide=1, heightChord=None):
+    def __init__(self, span, height, nVertWebsPerSide=1, trussDepth=None):
         self.span = span
         self.height = height
-        self.heightChord = span / 10 if heightChord is None else heightChord
+        self.trussDepth = span / 10 if trussDepth is None else trussDepth
         self.nWeb = nVertWebsPerSide
 
     def getNNodes(self):
@@ -33,7 +33,7 @@ class Geometry(object):
         # add upper nodes
         for i in range(0, nSpansTop + 1):
             xit = horSpacingTop * i
-            hit = min(xit * 2 * self.height / self.span, 2 * self.height - xit * 2 * self.height / self.span) + self.heightChord
+            hit = min(xit * 2 * self.height / self.span, 2 * self.height - xit * 2 * self.height / self.span) + self.trussDepth
             nodes.append(Node(xit, hit))
 
         # add lower nodes

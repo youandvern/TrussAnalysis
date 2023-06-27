@@ -7,9 +7,10 @@ class Geometry(object):
     """
     Class to generate nodes and members for Fink Roof Truss geometry
     """
-    def __init__(self, span, height, nVertWebsPerSide=1):
+    def __init__(self, span, height, nVertWebsPerSide=1, trussDepth=None):
         self.span = span
         self.height = height
+        self.trussDepth = height if trussDepth is None else trussDepth
         self.nWeb = nVertWebsPerSide
 
     def getNNodes(self):
