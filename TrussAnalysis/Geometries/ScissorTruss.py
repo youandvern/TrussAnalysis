@@ -10,7 +10,7 @@ class Geometry(object):
     def __init__(self, span, height, nVertWebsPerSide=1, trussDepth=None):
         self.span = span
         self.height = height
-        self.trussDepth = span / 10 if trussDepth is None else trussDepth
+        self.trussDepth = span / 8 if trussDepth is None else trussDepth
         self.nWeb = nVertWebsPerSide
 
     def getNNodes(self):
@@ -23,30 +23,39 @@ class Geometry(object):
         return self.height / self.span
 
     def getNodes(self):
-        nNodes = self.getNNodes()
-        nSpansTop = (2 * (self.nWeb // 2 + 1))
-        nSpansBot = (2 * ((self.nWeb + 1) // 2))
-        horSpacingTop = self.span / nSpansTop
-        horSpacingBot = self.span / nSpansBot
+
+        # special geometry when nWeb = 1
+        if self.nWeb == 1 and self.height > self.trussDepth > 0:
+            mid_x = self.span * (self.height - self.trussDepth) / (2 * self.height - self.trussDepth)
+            mid_y = (self.height - self.trussDepth) * (1 + self.trussDepth / (2 * self.height - self.trussDepth))
+            return [
+                Node(0, 0, "pin"),
+                Node(mid_x, mid_y),
+                Node(self.span / 2, self.height - self.trussDepth),
+                Node(self.span / 2, self.height),
+                Node(self.span - mid_x, mid_y),
+                Node(self.span, 0, "roller"),
+            ]
+
+        nSpans = 2 * (self.nWeb + 1)
+        horSpacing = self.span / nSpans
         nodes = []
 
-        # add upper nodes
-        for i in range(0, nSpansTop + 1):
-            xit = horSpacingTop * i
-            hit = min(xit * 2 * self.height / self.span, 2 * self.height - xit * 2 * self.height / self.span) + self.trussDepth
-            nodes.append(Node(xit, hit))
+        is_top = (self.nWeb % 2) == 0
+        for i in range(0, nSpans + 1):
+            chord_rise = self.height if is_top else self.height - self.trussDepth
+            xi = i * horSpacing
+            yi = min(xi * 2 * chord_rise / self.span, 2 * chord_rise - xi * 2 * chord_rise / self.span)
+            nodes.append(Node(xi, yi))
 
-        # add lower nodes
-        for i in range(0, nSpansBot + 1):
-            xib = horSpacingBot * i
-            hib = min(xib * 2 * self.height / self.span, 2 * self.height - xib * 2 * self.height / self.span)
-            nodes.append(Node(xib, hib))
+            # two nodes added at center point
+            if i == nSpans / 2:
+                nodes.append(Node(xi, self.height))
 
-        # sort nodes
-        nodes.sort(key=lambda x: (x.x, x.y))
+            is_top = not is_top
 
         nodes[0].fixity = 'pin'  # left support
-        nodes[-2].fixity = 'roller'  # right support
+        nodes[-1].fixity = 'roller'  # right support
 
         return nodes
 
@@ -55,52 +64,26 @@ class Geometry(object):
         nNodes = self.getNNodes()
         members = []
 
-        if even:
-            start = 1
-            end = 2
-            for i in range(nNodes // 2):
-                members.append(Member(start, end, MemberType.topChord))
-                start = end
-                end += 1 if start == nNodes / 2 else 2
+        start = 0
+        end = 2 if even else 1
+        while start < nNodes - 1:
+            members.append(Member(start, min(nNodes - 1, end), MemberType.topChord))
+            start = end
+            end += 1 if end == nNodes / 2 else 2
 
-            start = 0
-            end = 3
-            for i in range(nNodes // 2 - 2):
-                members.append(Member(start, end, MemberType.botChord))
-                start = end
-                end += 3 if start == nNodes / 2 - 1 else 2
+        start = 0
+        end = 1 if even else 2
+        while start < nNodes - 1:
+            members.append(Member(start, min(nNodes - 1, end), MemberType.botChord))
+            start = end
+            end += 3 if end == nNodes / 2 - 1 else 2
 
-            start = 0
-            end = 1
-            vertWebs = [1, nNodes / 2, nNodes - 1]
-            for i in range(nNodes - 1):
-                webType = MemberType.vertWeb if end in vertWebs else MemberType.diaWeb
-                members.append(Member(start, end, webType))
-                start = start if end == 1 or end == nNodes / 2 else end
-                end += 1
-
-        else:
-            for i in range(1, nNodes - 2, 2):
-                members.append(Member(i, i + 2, MemberType.topChord))
-
-            for i in range(0, nNodes - 3, 2):
-                members.append(Member(i, i + 2, MemberType.botChord))
-
-            start = 0
-            end = 1
-            vertWebs = [1, nNodes / 2, nNodes - 2]
-            for i in range(nNodes - 1):
-                webType = MemberType.vertWeb if end in vertWebs else MemberType.diaWeb
-                members.append((Member(start, end, webType)))
-                start = start if end == nNodes / 2 else end
-                if end < nNodes / 2:
-                    end += 1
-                elif end == nNodes / 2:
-                    end += 2
-                elif (end % 2) == 0:
-                    end += 3
-                else:
-                    end -= 1
+        start = 1
+        end = 2
+        while end <= nNodes - 2:
+            members.append(Member(start, end, MemberType.vertWeb if end == nNodes / 2 else MemberType.diaWeb))
+            start = start if end == nNodes / 2 else end
+            end += 1
 
         return members
 
@@ -109,17 +92,14 @@ class Geometry(object):
         even = (self.nWeb % 2) == 0
         nNodes = self.getNNodes()
         topNodeIndices = []
-        topNodeIndices.append(1)
+        topNodeIndices.append(0)
 
-        if even:
-            end = 2
-            for i in range(nNodes // 2):
-                topNodeIndices.append(end)
-                end += 1 if end == nNodes / 2 else 2
+        i = 2 if even else 1
+        for j in range(0, 2 * ((self.nWeb + 1) // 2) + 1):
+            topNodeIndices.append(i)
+            i += 1 if i == nNodes / 2 else 2
 
-        else:
-            for i in range(3, nNodes, 2):
-                topNodeIndices.append(i)
+        topNodeIndices.append(nNodes - 1)
 
         return topNodeIndices
 
@@ -130,27 +110,31 @@ class Geometry(object):
         botNodeIndices = []
         botNodeIndices.append(0)
 
-        if even:
-            end = 3
-            for i in range(nNodes // 2 - 2):
-                botNodeIndices.append(end)
-                end += 3 if end == nNodes / 2 - 1 else 2
+        i = 1 if even else 2
+        for j in range(0, 2 * (self.nWeb // 2) + 1):
+            botNodeIndices.append(i)
+            i += 3 if i == nNodes / 2 - 1 else 2
 
-        else:
-            for i in range(2, nNodes - 1, 2):
-                botNodeIndices.append(i)
+        botNodeIndices.append(nNodes - 1)
 
         return botNodeIndices
 
     # left to right
     def getTopWebNodesIndices(self):
-        return self.getTopNodesIndices()
+        topWebNodeIndices = self.getTopNodesIndices()
+        removeNodes = [topWebNodeIndices[0],
+                       topWebNodeIndices[-1]]
+
+        for i in removeNodes:
+            topWebNodeIndices.remove(i)
+
+        return topWebNodeIndices
 
     # left to right
     def getBotWebNodesIndices(self):
         botWebNodeIndices = self.getBotNodesIndices()
         removeNodes = [botWebNodeIndices[0],
-                       botWebNodeIndices[- 1]]
+                       botWebNodeIndices[-1]]
 
         for i in removeNodes:
             botWebNodeIndices.remove(i)
