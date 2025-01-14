@@ -81,3 +81,70 @@ def test_analysis():
     assert approx(trussAnalysis.members[2].axial, 0.001) == 4.43
     assert approx(trussAnalysis.members[4].axial, 0.001) == -6.38
     assert approx(trussAnalysis.members[12].axial, 0.001) == 0.0
+
+
+def test_original_design():
+    truss = Geometry(50, 10, 2)
+
+    print(list(map(lambda n: (n.x, n.y), truss.getNodes())))
+
+    xs1 = MyHSS(4, 4-2*0.116, 2, 2-2*0.116)
+    # xs1 = xs.AISC('HSS4X2X1/8')
+    A992 = ma.A992()
+    trussAnalysis = Truss.Truss(cross=xs1, material=A992)
+
+    for node in truss.getNodes():
+        trussAnalysis.addNode(node.x, node.y, fixity=node.fixity)
+
+    for mem in truss.getMembers():
+        trussAnalysis.addMember(mem.start, mem.end)
+
+    forces = Forces(truss.getNNodes())
+    forces.setForceAtNodes(truss.getTopNodesIndices(), forceY=-2.25)
+    forces.setForceAtNode(0, forceY=-1.12)
+    forces.setForceAtNode(truss.getNNodes() - 1, forceY=-1.12)
+
+    trussAnalysis.directStiffness(np.array(forces.forces))
+    assert approx(trussAnalysis.members[0].axial, 0.01) == 15.146
+    assert approx(trussAnalysis.members[0].length, 0.01) == 8.975
+
+    assert approx(trussAnalysis.members[3].axial, 0.01) == 9.087
+    assert approx(trussAnalysis.members[7].axial, 0.01) == -14.0625
+    assert approx(trussAnalysis.members[18].axial, 0.01) == -1.125
+
+
+def test_alt_design_nodes_moved():
+    truss = Geometry(50, 10, 2)
+
+    xs1 = MyHSS(4, 4-2*0.116, 2, 2-2*0.116)
+    # xs1 = xs.AISC('HSS4X2X1/8')
+    A992 = ma.A992()
+    trussAnalysis = Truss.Truss(cross=xs1, material=A992)
+
+    nodes = truss.getNodes()
+    nodes[2].x = 11.3125
+    nodes[2].fixity = "roller"
+    nodes[8].x = 34.5625
+    nodes[8].fixity = "roller"
+
+    print(list(map(lambda n: (n.x, n.y), nodes)))
+
+    for node in nodes:
+        trussAnalysis.addNode(node.x, node.y, fixity=node.fixity)
+
+    for mem in truss.getMembers():
+        trussAnalysis.addMember(mem.start, mem.end)
+
+    forces = Forces(truss.getNNodes())
+    forces.setForceAtNodes(truss.getTopNodesIndices(), forceY=-2.25)
+    forces.setForceAtNode(0, forceY=-1.12)
+    forces.setForceAtNode(truss.getNNodes() - 1, forceY=-1.12)
+
+    trussAnalysis.directStiffness(np.array(forces.forces))
+    trussAnalysis.plot()
+    assert approx(trussAnalysis.members[0].axial, 0.01) == 15.146
+    assert approx(trussAnalysis.members[0].length, 0.01) == 8.975
+
+    assert approx(trussAnalysis.members[3].axial, 0.01) == 9.087
+    assert approx(trussAnalysis.members[7].axial, 0.01) == -14.0625
+    assert approx(trussAnalysis.members[18].axial, 0.01) == -1.125
